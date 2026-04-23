@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+# Exclui apenas o banco de journaling temporário, mantém o banco principal com os leads
+*.db-journal
+*.db-wal
+*.db-shm
+# Arquivos de teste/debug temporários
+serper.json

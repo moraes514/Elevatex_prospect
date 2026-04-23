@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id           String   @id @default(uuid())
+  name         String
+  category     String                          // ex: "barbearia", "salao"
+  city         String
+  state        String   @default("SP")
+  address      String?
+  phone        String?
+  website      String?
+  mapsUrl      String?  @map("maps_url")
+  placeId      String?  @unique @map("place_id")
+  rating       Float?
+  reviewsCount Int?     @map("reviews_count")
+  hasWebsite   Boolean  @default(false) @map("has_website")
+  source       String   @default("google_places")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  score          LeadScore?
+  recommendation Recommendation?
+  messages       MessageDraft[]
+  statuses       LeadStatus[]
+  notes          LeadNote[]
+
+  @@map("leads")
+}
+
+model LeadScore {
+  id             String @id @default(uuid())
+  leadId         String @unique @map("lead_id")
+  score          Int
+  classification String               // "quente" | "bom" | "fraco"
+  scoreReason    String @map("score_reason")  // JSON string com breakdown
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("lead_scores")
+}
+
+model Recommendation {
+  id                 String @id @default(uuid())
+  leadId             String @unique @map("lead_id")
+  recommendedService String @map("recommended_service")
+  confidence         Float  @default(0.8)
+  reasoning          String
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("recommendations")
+}
+
+model MessageDraft {
+  id          String   @id @default(uuid())
+  leadId      String   @map("lead_id")
+  content     String
+  tone        String   @default("formal")
+  generatedAt DateTime @default(now()) @map("generated_at")
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("message_drafts")
+}
+
+model LeadStatus {
+  id        String   @id @default(uuid())
+  leadId    String   @map("lead_id")
+  status    String                    // enum via código
+  updatedBy String?  @map("updated_by")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("lead_statuses")
+}
+
+model LeadNote {
+  id        String   @id @default(uuid())
+  leadId    String   @map("lead_id")
+  note      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("lead_notes")
+}
