@@ -1,4 +1,4 @@
-import React from 'react';
+import { } from 'react'; // React import removed to fix TS error
 import Dashboard from './Dashboard';
 
 function App() {

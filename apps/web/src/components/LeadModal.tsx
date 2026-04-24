@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, Copy, Mail, Star, MapPin, MessageSquare, Save, CheckCircle, ExternalLink, Phone } from 'lucide-react';
 
 interface LeadModalProps {

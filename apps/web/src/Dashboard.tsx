@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, MapPin, Building2, Star, Link as LinkIcon, Phone, ChevronRight, Database, Zap, Trash2 } from 'lucide-react';
 import LeadModal from './components/LeadModal';
 
