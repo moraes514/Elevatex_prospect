@@ -17,7 +17,7 @@ export default function Dashboard() {
   const [isTransient, setIsTransient] = useState(false);
 
   const fetchCrmLeads = async () => {
-    const res = await fetch('http://localhost:3333/api/leads');
+    const res = await fetch('/api/leads');
     if (res.ok) setCrmLeads(await res.json());
   };
 
@@ -28,7 +28,7 @@ export default function Dashboard() {
     setLoading(true);
     setSearchResults([]);
     try {
-      const res = await fetch('http://localhost:3333/api/collector/search', {
+      const res = await fetch('/api/collector/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ niche, region, limit, filterBy })
@@ -50,7 +50,7 @@ export default function Dashboard() {
   };
 
   const openCrmLead = async (id: string) => {
-    const res = await fetch(`http://localhost:3333/api/leads/${id}`);
+    const res = await fetch(`/api/leads/${id}`);
     if (res.ok) {
       setSelectedLead(await res.json());
       setIsTransient(false);
@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   const handleClearCrm = async () => {
     if (!confirm('Tem certeza? Isso vai apagar TODOS os leads do CRM.')) return;
-    await fetch('http://localhost:3333/api/leads/clear', { method: 'DELETE' });
+    await fetch('/api/leads/clear', { method: 'DELETE' });
     fetchCrmLeads();
   };
 
